@@ -1,0 +1,16 @@
+{
+  "name": "chat-plus",
+  "version": "1.0.0",
+  "description": "awa",
+  "main": "index.js",
+  "repository": "git@github.com:shr-NaHCO3/chat-plus.git",
+  "author": "shr-NaHCO3 <shrshr2@163.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1",
+    "socket.io": "^4.5.1"
+  },
+  "scripts": {
+    "dev": "node index.js"
+  }
+}
