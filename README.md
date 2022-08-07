@@ -66,6 +66,8 @@ GFW式星系是普通星系的超集。
 
 ## 日程 预计2024/2/24完工
 
+前端同步更新
+
 - [x] 安全函数`safe.js: getKey(), xor()`
 - [ ] 安全收发`route.js:`
     - [ ] `safesend(事件名, 数据, socket)`
