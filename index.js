@@ -32,5 +32,5 @@ io.on('connection', (socket)=>{
 
 
 server.listen(3000, (err)=>{
-    console.log(err?err:"3000");
+    console.log(err?err:"http://localhost:3000");
 })
