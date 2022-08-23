@@ -3,52 +3,56 @@
  * @author shr-nahco3<shrshr2@163.com>
 */
 
-/**
- * 随机获得key
- * @return key
-*/
-function getKey(){
-    let res = '';
-    for(i=0;i<16;i++){
-        res += String.fromCharCode(Math.floor(Math.random()*0x10ffff));
-    }
-    return res;
-}
+const nodeRSA = require('node-rsa');
+const JSEncrypt = require('node-jsencrypt');
 
+const scon = require('./sconsole.js');
 
 /**
- * 对字符串加密
- * 给定两个字符串进行加密
- * @param text{String} 要加密的值
- * @param key{String} 加密key
- * @return 加密结果
+ * 获取rsa密钥
+ * @return nodeRSA
  */
-function xor(text, key){
-  let textlen = text.length;
-  let keylen = key.length;
-  let res = '';
-  for(let i=0; i<textlen; i++){
-    res += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i%keylen));
-  }
-  return res;
+function getKey(){
+  return new nodeRSA({b:512});
 }
 
 /**
- * 安全发送
- * 对给定的事件和数据安全发送
- * @param event{String} 事件名
- * @param data{String} 数据
- * @param socket{Object} 要发送的socket
-*/
-function safeSend(event, data, socket){
-  socket.emit('safeget',JSON.stringify({
-    event,
-    data: xor(data, socket.config.safe.key)
-  }))
+ * 加密
+ * 对需要加密的数据进行加密
+ * @param {string} data
+ * @param {string} publicKey
+ */
+function encrypt(data, publicKey) {
+	let encryptor = new JSEncrypt()
+	encryptor.setPublicKey(publicKey)
+	return encryptor.encrypt(data)
+}
+
+/**
+ * 解密
+ * 解密
+ * @param {string} data
+ * @param {string} privateKey
+ */
+function decrypt(data, privateKey) {
+	let decrypt = new JSEncrypt();
+	decrypt.setPrivateKey(privateKey);
+	return decrypt.decrypt(data);
+}
+
+/**
+ * 加密发送
+ * @param {Socket} socket socekt
+ * @param {String} publicKey 公钥
+ * @param {String} event 事件
+ * @param {*} data 数据
+ */
+function sendEncrypted(socket, publicKey, event, data){
+  socket.emit(event, encrypt(data, publicKey));
 }
 
 module.exports = {
-  xor,
   getKey,
-  safeSend,
+  encrypt,
+  sendEncrypted,
 }

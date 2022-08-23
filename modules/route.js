@@ -1,17 +1,17 @@
 const safe = require('./safe.js')
+const scon = require('./sconsole.js')
 
-const safeget = (data, socket) => {
-  let dataJSON = JSON.parse(data);
-  socket.emit(dataJSON.event, safe.xor(dataJSON.data, socket.config.safe.key))
+function on(socket, event, callback){
+  socket.on(event, (data)=>{
+    // try{
+    //   callback(data)
+    // }catch(err){
+    //   scon.error(0, `${err}`)
+    // }
+    callback(data)
+  })
 }
 
-
-
 module.exports = {
-  constants: {
-    
-  },
-  routes: {
-    safeget,
-  }
+  on,
 }
