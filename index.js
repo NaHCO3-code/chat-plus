@@ -33,11 +33,17 @@ io.on('connection', (socket)=>{
 
   // 接受RSA-publicKey
   route.on(socket, 'publicKey', (data)=>{
+    scon.info(0,data);
     socket.config.publicKey = data.publicKey;
     // 发送RSA-publicKey
     socket.emit('publicKey', {publicKey: socket.config.rsaKeyObj.exportKey('pkcs8-public')});
     // hello world
     safe.sendEncrypted(socket, socket.config.publicKey, 'helloworld', 'hello world');
+  })
+
+  // 用户注册
+  route.on(socket, 'register', (data)=>{
+    console.log(data)
   })
 })
 
@@ -46,7 +52,7 @@ io.on('connection', (socket)=>{
 sql.init()
 // 启动服务器
 .then(()=>{
-  sql.register('小苏打', 'e10adc3949ba59abbe56e057f20f883e', '1145141919810');
+  //sql.register('小苏打', 'e10adc3949ba59abbe56e057f20f883e', '1145141919810');
   server.listen(config.server.port, (err)=>{
     scon.info(0, err?err:`http://localhost:${config.server.port}`);
   })  
