@@ -20,8 +20,6 @@ let io = require('socket.io')(server, {
 // 已连接的socket
 let online = [];
 
-// sql初始化
-sql.init();
 
 io.on('connection', (socket)=>{
   new Promise((res, rej)=>{
@@ -31,25 +29,28 @@ io.on('connection', (socket)=>{
     online.push(socket);
     res(void 0);
   })
-  .then(val => new Promise((res, rej)=>{
-    scon.info(0, socket.config.rsaKeyObj.exportKey('pkcs8-public'));
-    res(void 0);
-  }))
-  .then(val => new Promise((res, rej)=>{
-    // 发送RSA-publicKey
-    socket.emit('publicKey', {publicKey: socket.config.rsaKeyObj.exportKey('pkcs8-public')})
-  }))
 
 
   // 接受RSA-publicKey
   route.on(socket, 'publicKey', (data)=>{
     socket.config.publicKey = data.publicKey;
-    // 发送测试
+    // 发送RSA-publicKey
+    socket.emit('publicKey', {publicKey: socket.config.rsaKeyObj.exportKey('pkcs8-public')});
+    // hello world
     safe.sendEncrypted(socket, socket.config.publicKey, 'helloworld', 'hello world');
   })
 })
 
 
-server.listen(config.server.port, (err)=>{
-    console.log(err?err:`http://localhost:${config.server.port}`);
+// sql初始化
+sql.init()
+// 启动服务器
+.then(()=>{
+  sql.register('小苏打', 'e10adc3949ba59abbe56e057f20f883e', '1145141919810');
+  server.listen(config.server.port, (err)=>{
+    scon.info(0, err?err:`http://localhost:${config.server.port}`);
+  })  
 })
+.catch((err)=>{
+  scon.error(0, err);
+});

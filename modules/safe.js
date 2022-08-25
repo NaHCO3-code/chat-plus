@@ -45,14 +45,21 @@ function decrypt(data, privateKey) {
  * @param {Socket} socket socekt
  * @param {String} publicKey 公钥
  * @param {String} event 事件
- * @param {*} data 数据
+ * @param {String} data 数据
  */
 function sendEncrypted(socket, publicKey, event, data){
-  socket.emit(event, encrypt(data, publicKey));
+  socket.emit(
+    event,
+    {
+      encrypt: true,
+      data: encrypt(data, publicKey),
+    }
+  );
 }
 
 module.exports = {
   getKey,
   encrypt,
+  decrypt,
   sendEncrypted,
 }

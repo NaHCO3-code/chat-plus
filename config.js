@@ -14,5 +14,8 @@ module.exports = {
     user: 'root',
     password: "wXj0pxu5s",
     database: "schat",
+  },
+  user: {
+    inviteCode: '1145141919810',
   }
 }
