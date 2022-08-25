@@ -7,7 +7,6 @@
   "author": "shr-NaHCO3 <shrshr2@163.com>",
   "license": "MIT",
   "dependencies": {
-    "encryptlong": "^3.1.4",
     "express": "^4.18.1",
     "mysql": "^2.18.1",
     "node-jsencrypt": "^1.0.0",
